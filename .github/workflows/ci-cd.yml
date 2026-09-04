@@ -150,7 +150,6 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
           projectBaseDir: backend/payment_service
-          # SonarQube permission update
           args: >
             -Dsonar.projectKey=micoservice-payment
             -Dsonar.projectName=micoservice-payment
