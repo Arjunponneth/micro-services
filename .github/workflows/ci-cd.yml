@@ -206,3 +206,33 @@ jobs:
           tags: |
             arjunponneth/payment-service:${{ github.sha }}
             arjunponneth/payment-service:latest
+  deploy:
+   name: Deploy with Docker Compose
+   runs-on: self-hosted
+
+   needs:
+    - docker-build-push
+
+   steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Login to Nexus
+      run: |
+        echo "${{ secrets.NEXUS_PASSWORD }}" | docker login \
+          ${{ secrets.NEXUS_HOST }} \
+          -u "${{ secrets.NEXUS_USERNAME }}" \
+          --password-stdin
+
+    - name: Pull latest images
+      run: |
+        docker compose pull
+
+    - name: Deploy application
+      run: |
+        docker compose up -d
+
+    - name: Check running containers
+      run: |
+        docker compose ps
+        
