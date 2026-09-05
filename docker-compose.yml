@@ -12,7 +12,7 @@ services:
       - app-network
 
   auth-service:
-    build: ./backend/auth_service
+    image: 3.110.219.17:8082/auth-service:latest
     environment:
       - MONGODB_URI=mongodb://mongodb:27017/payment_app
       - JWT_SECRET=your-secret-key
@@ -30,7 +30,7 @@ services:
       - app-network
 
   payment-service:
-    build: ./backend/payment_service
+    image: 3.110.219.17:8082/payment-service:latest
     environment:
       - MONGODB_URI=mongodb://mongodb:27017/payment_app
       - ELASTICSEARCH_HOST=elasticsearch
@@ -50,7 +50,7 @@ services:
       - app-network
 
   frontend:
-    build: ./frontend
+    image: 3.110.219.17:8082/frontend:latest
     ports:
       - "4200:80"
     depends_on:
