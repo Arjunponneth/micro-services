@@ -154,7 +154,9 @@ jobs:
             -Dsonar.projectKey=micoservice-payment
             -Dsonar.projectName=micoservice-payment
             -Dsonar.sources=src
-    docker-build-push:
+   
+    
+  docker-build-push:
     name: Build and Push Docker Images
     runs-on: ubuntu-latest
     needs:
