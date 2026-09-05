@@ -176,38 +176,41 @@ jobs:
             -u "${{ secrets.NEXUS_USERNAME }}" \
             --password-stdin
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Build frontend image
+        run: |
+          docker build \
+            -t ${{ secrets.NEXUS_HOST }}/frontend:${{ github.sha }} \
+            -t ${{ secrets.NEXUS_HOST }}/frontend:latest \
+            ./frontend
 
-      - name: Build and push frontend image
-        uses: docker/build-push-action@v7
-        with:
-          context: ./frontend
-          file: ./frontend/Dockerfile
-          push: true
-          tags: |
-            ${{ secrets.NEXUS_HOST }}/frontend:${{ github.sha }}
-            ${{ secrets.NEXUS_HOST }}/frontend:latest
+      - name: Push frontend image
+        run: |
+          docker push ${{ secrets.NEXUS_HOST }}/frontend:${{ github.sha }}
+          docker push ${{ secrets.NEXUS_HOST }}/frontend:latest
 
-      - name: Build and push auth service image
-        uses: docker/build-push-action@v7
-        with:
-          context: ./backend/auth_service
-          file: ./backend/auth_service/Dockerfile
-          push: true
-          tags: |
-            ${{ secrets.NEXUS_HOST }}/auth-service:${{ github.sha }}
-            ${{ secrets.NEXUS_HOST }}/auth-service:latest
+      - name: Build auth service image
+        run: |
+          docker build \
+            -t ${{ secrets.NEXUS_HOST }}/auth-service:${{ github.sha }} \
+            -t ${{ secrets.NEXUS_HOST }}/auth-service:latest \
+            ./backend/auth_service
 
-      - name: Build and push payment service image
-        uses: docker/build-push-action@v7
-        with:
-          context: ./backend/payment_service
-          file: ./backend/payment_service/Dockerfile
-          push: true
-          tags: |
-            ${{ secrets.NEXUS_HOST }}/payment-service:${{ github.sha }}
-            ${{ secrets.NEXUS_HOST }}/payment-service:latest
+      - name: Push auth service image
+        run: |
+          docker push ${{ secrets.NEXUS_HOST }}/auth-service:${{ github.sha }}
+          docker push ${{ secrets.NEXUS_HOST }}/auth-service:latest
+
+      - name: Build payment service image
+        run: |
+          docker build \
+            -t ${{ secrets.NEXUS_HOST }}/payment-service:${{ github.sha }} \
+            -t ${{ secrets.NEXUS_HOST }}/payment-service:latest \
+            ./backend/payment_service
+
+      - name: Push payment service image
+        run: |
+          docker push ${{ secrets.NEXUS_HOST }}/payment-service:${{ github.sha }}
+          docker push ${{ secrets.NEXUS_HOST }}/payment-service:latest
 
 
   deploy:
