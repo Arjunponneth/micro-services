@@ -158,7 +158,7 @@ jobs:
     
   docker-build-push:
     name: Build and Push Docker Images
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs:
       - frontend-sonarqube
       - auth-sonarqube
