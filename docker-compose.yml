@@ -19,10 +19,9 @@ services:
     volumes:
       - ./backend/common:/app/common
     logging:
-      driver: "json-file"
+      driver: "gelf"
       options:
-        max-size: "10m"
-        max-file: "3"
+        gelf-address: "udp://logstash:12201"
     depends_on:
       - mongodb
       - elasticsearch
@@ -93,6 +92,8 @@ services:
 
   logstash:
     image: docker.elastic.co/logstash/logstash:7.9.3
+    ports:
+      - "12201:12201/udp"
     volumes:
       - ./elk/logstash/config/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
       - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
