@@ -36,10 +36,9 @@ services:
     volumes:
       - ./backend/common:/app/common
     logging:
-      driver: "json-file"
+      driver: "gelf"
       options:
-        max-size: "10m"
-        max-file: "3"
+        gelf-address: "udp://logstash:12201"
     depends_on:
       - mongodb
       - elasticsearch
